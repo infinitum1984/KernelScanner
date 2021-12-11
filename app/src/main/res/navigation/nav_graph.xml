@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_cargo">
+
+    <fragment
+        android:id="@+id/navigation_cargo"
+        android:name="com.kernel.scanner.cargo.CargoFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_cargo">
+        <action
+            android:id="@+id/action_navigation_cargo_to_navigation_scanner"
+            app:destination="@id/navigation_scanner" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_scanner"
+        android:name="com.kernel.scanner.cargo.ScannerFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_scanner">
+        <action
+            android:id="@+id/action_navigation_scanner_to_navigation_cargo"
+            app:destination="@id/navigation_cargo" />
+    </fragment>
+</navigation>

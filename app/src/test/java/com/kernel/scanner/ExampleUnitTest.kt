@@ -16,6 +16,6 @@ class ExampleUnitTest {
     }
     @Test
     fun strProcessTest(){
-        println(findCodeInString("A42988 188fsdf"))
+        println(findCodeInString(")wefwefA429 8 8 188fsdf"))
     }
 }
