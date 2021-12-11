@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "370986805097",
+    "project_id": "kernel-b4b57",
+    "storage_bucket": "kernel-b4b57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370986805097:android:3cef902fb4970645d2bff8",
+        "android_client_info": {
+          "package_name": "com.kernel.scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "370986805097-7ag8f8ru0b14dfbtof9n5070lr2pdsfi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtN0tJtqt4IOBzAD6_FOQjzOycjFhnMF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "370986805097-7ag8f8ru0b14dfbtof9n5070lr2pdsfi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
