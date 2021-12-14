@@ -3,6 +3,7 @@ package com.kernel.scanner.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(tableName = "cargo_table")
 
@@ -22,9 +23,6 @@ data class Cargo(
 
     @ColumnInfo(name = "driverPhone")
     val driverPhone:String="",
-
-    @ColumnInfo(name = "sealNumber")
-    val sealNumber:String="",
 
     @ColumnInfo(name = "isChecked")
     var isChecked:Boolean=false

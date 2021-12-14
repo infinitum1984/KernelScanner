@@ -22,11 +22,11 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.kernel.scanner.R
-import com.kernel.scanner.databinding.ActivityTestBinding
 import com.kernel.scanner.databinding.FragmentScannerBinding
 import com.kernel.scanner.findCodeInString
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -36,6 +36,8 @@ class ScannerFragment : Fragment() {
     val binding get() = _binding!!
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var cameraProvider:ProcessCameraProvider
+    private lateinit var cameraSelector:CameraSelector
     val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     var code = ""
 
@@ -49,7 +51,7 @@ class ScannerFragment : Fragment() {
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener(Runnable {
-            val cameraProvider = cameraProviderFuture.get()
+            cameraProvider = cameraProviderFuture.get()
             bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(requireContext()))
 
@@ -58,16 +60,25 @@ class ScannerFragment : Fragment() {
     }
 
 
+    @SuppressLint("RestrictedApi")
     override fun onDestroyView() {
+        cameraProvider.unbindAll()
+        cameraProvider.shutdown()
+        cameraExecutor.shutdown()
+        recognizer.close()
+
+
         super.onDestroyView()
         _binding = null
+
+
     }
-    @SuppressLint("UnsafeOptInUsageError")
+    @SuppressLint("UnsafeOptInUsageError", "RestrictedApi")
     fun bindPreview(cameraProvider: ProcessCameraProvider) {
         var preview: Preview = Preview.Builder()
             .build()
 
-        var cameraSelector: CameraSelector = CameraSelector.Builder()
+        cameraSelector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
             .build()
 
@@ -76,7 +87,7 @@ class ScannerFragment : Fragment() {
         val imageAnalysis = ImageAnalysis.Builder()
             // enable the following line if RGBA output is needed.
             // .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-            .setTargetResolution(Size(1280, 720))
+            //.setTargetResolution(Size(1280, 720))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build()
         imageAnalysis.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { imageProxy ->
@@ -87,46 +98,55 @@ class ScannerFragment : Fragment() {
             if (mediaImage == null) return@Analyzer
 
 
-            val image =
+            var image =
                 InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
             val result = recognizer.process(image)
                 .addOnSuccessListener { visionText ->
                     // Task completed successfully
                     // ...
+                    if (!isAdded) return@addOnSuccessListener
+
                     Log.d("D_MainActivity", "bindPreview: ${visionText.text}");
                     val rec_code = findCodeInString(visionText.text)
                     code = rec_code
+                    if (rec_code=="") return@addOnSuccessListener
+
 
                     requireActivity().runOnUiThread {
-                        if (rec_code != "") {
                             binding.textViewCode.text = "Розпізнано код: "+rec_code
                             setFragmentResult(CargoFragment.REQUEST_KEY, bundleOf("code" to rec_code))
-
-                            findNavController().navigateUp()
-                        }
-
+                        cameraExecutor.shutdown()
+                        recognizer.close()
+                        cameraProvider.unbindAll()
+                        cameraProvider.shutdown()
+                            findNavController().navigate(R.id.action_navigation_scanner_to_navigation_cargo)
 
                     }
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception
                     // ...
-                    //Log.d("D_MainActivity","bindPreview: ${e.message}");
+
+                    Log.d("D_MainActivity","bindPreview: ${e.message}");
                     // binding.textView3.text=e.message
 
                 }
+                .addOnCompleteListener {
+                    imageProxy.close()
+                    mediaImage.close()
+                }
             // after done, release the ImageProxy object
-            imageProxy.close()
 
 
         })
 
         cameraProvider.bindToLifecycle(
-            this as LifecycleOwner,
+            viewLifecycleOwner,
             cameraSelector,
             imageAnalysis,
             preview
         )
     }
+
 }

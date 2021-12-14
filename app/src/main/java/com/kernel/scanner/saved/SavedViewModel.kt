@@ -10,10 +10,6 @@ import kotlinx.coroutines.launch
 
 class SavedViewModel : ViewModel() {
 
-    private val _listSaved = MutableLiveData<List<Cargo>>().apply {
-        viewModelScope.launch {
-            value= Repository.getSavedCargo()
-        }
-    }
-    val listSaved: LiveData<List<Cargo>> = _listSaved
+    val listSaved: LiveData<List<Cargo>> =Repository.getSavedCargo()
+
 }

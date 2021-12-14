@@ -5,8 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.kernel.scanner.model.Cargo
+import com.kernel.scanner.model.Seal
 
-@Database(entities = [Cargo::class],version = 1,exportSchema = false)
+@Database(entities = [Cargo::class,Seal::class],version = 1,exportSchema = false)
 abstract class CargoDatabase :RoomDatabase(){
     abstract val cargoDatabaseDao:CargoDatabaseDao
     companion object{

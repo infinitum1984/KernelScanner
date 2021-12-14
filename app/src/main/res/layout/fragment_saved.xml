@@ -10,11 +10,11 @@
         android:id="@+id/recyclerSaved"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:listitem="@layout/cargo_item"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        />
+        tools:listitem="@layout/cargo_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

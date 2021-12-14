@@ -1,61 +1,79 @@
 package com.kernel.scanner.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.kernel.scanner.KernelApplication
 import com.kernel.scanner.database.CargoDatabase
 import com.kernel.scanner.model.Cargo
+import com.kernel.scanner.model.Seal
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 
 object Repository {
-    suspend fun getQueueCargo():List<Cargo> =
-        withContext(Dispatchers.IO){
-            val outList= listOf<Cargo>()
+    fun getQueueCargo():LiveData<List<Cargo>> {
+        val outList=MutableLiveData<List<Cargo>>()
 
-            if (KernelApplication.getContext()==null) return@withContext outList
-
-            val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
-
-            dataSource.getQueueList()
-
-        }
-    suspend fun getSavedCargo():List<Cargo> =
-        withContext(Dispatchers.IO){
-            val outList= listOf<Cargo>()
-
-            if (KernelApplication.getContext()==null) return@withContext outList
-
-            val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
-
-            dataSource.getSavedList()
-
-        }
-    suspend fun getCargo(id:Long):Cargo = withContext(Dispatchers.IO){
-        if (KernelApplication.getContext()==null) return@withContext Cargo()
+        if (KernelApplication.getContext()==null) return outList
 
         val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
 
-        dataSource.get(id)
+        return dataSource.getQueueLiveList()
 
     }
 
-    suspend fun insertTestData(){
-        val list= listOf<Cargo>(
-            Cargo(carNumber = "AN21323SD", trailerNumber = "AS213233SD",
-                driverName = "Иван Иванов Иванович",driverPhone = "0500642665"),
 
-            Cargo(carNumber = "AN23SD", trailerNumber = "AS213233SD",
-                driverName = "Петр Иванов Иванович",driverPhone = "0500642665"),
-            Cargo(carNumber = "AS21323SD", trailerNumber = "AS213233SD",
-                driverName = "Иван Иванов Иванович",driverPhone = "0500642665",isChecked = true, sealNumber = "A12345678"),
+     fun getSavedCargo():LiveData<List<Cargo>> {
+            if (KernelApplication.getContext()==null) return liveData { }
 
-            Cargo(carNumber = "AS23SD", trailerNumber = "AS213233SD",
-                driverName = "Петр Иванов Иванович",driverPhone = "0500642665",isChecked = true,sealNumber = "A12345678"),
-        )
+            val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
+
+            return dataSource.getSavedList()
+
+        }
+     fun getCargo(id:Long): LiveData<Cargo> {
+        if (KernelApplication.getContext()==null) return liveData {  }
+
         val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
 
-        for (c in list){
-            dataSource.insert(c)
+
+        return dataSource.getLiveCargo(id)
+
+    }
+
+    suspend fun addSeal(seal: Seal){
+        if (KernelApplication.getContext()==null) return
+
+        withContext(Dispatchers.IO){
+            val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
+
+            dataSource.insertSeal(seal)
         }
+
+    }
+    suspend fun updateCargo(cargo: Cargo){
+        if (KernelApplication.getContext()==null) return
+
+        withContext(Dispatchers.IO){
+            val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
+
+            dataSource.updateCargo(cargo)
+        }
+    }
+    fun getSeals(cargoId:Long):LiveData<List<Seal>>{
+        if (KernelApplication.getContext()==null) return liveData {  }
+
+        val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
+
+        return dataSource.getSeals(cargoId)
+    }
+
+    suspend fun addTestQueue() {
+        val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
+        dataSource.insert(Cargo(carNumber = "AN21323SD", trailerNumber = "AS213233SD",
+            driverName = "Иван Иванов Иванович",driverPhone = "0500642665"))
     }
 
 }

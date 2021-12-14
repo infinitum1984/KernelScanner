@@ -2,7 +2,9 @@ package com.kernel.scanner.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.kernel.scanner.R
 import com.kernel.scanner.databinding.CargoItemBinding
 import com.kernel.scanner.model.Cargo
 
@@ -14,11 +16,14 @@ class CargoListAdapter(val onClickAction:(Cargo)->Unit): RecyclerView.Adapter<Ca
     }
     inner class ViewHolder(val binding:CargoItemBinding):RecyclerView.ViewHolder(binding.root) {
         fun bind(cargo: Cargo){
-            binding.textViewCarNum.text=cargo.carNumber
-            binding.textViewTrailerNum.text=cargo.trailerNumber
-            if (cargo.sealNumber.isNotEmpty())
+            binding.textViewCarNum.text="ТЗ: "+cargo.carNumber
+            binding.textViewTrailerNum.text="Причеп: "+cargo.trailerNumber
+            if (cargo.isChecked)
             {
-                binding.textViewSeal.text=cargo.sealNumber
+                binding.imageView.background=ContextCompat.getDrawable(binding.root.context,R.drawable.background_saved)
+
+            }else{
+                binding.imageView.background=ContextCompat.getDrawable(binding.root.context,R.drawable.background_queue)
 
             }
             binding.root.setOnClickListener {

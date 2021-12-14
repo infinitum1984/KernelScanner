@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.kernel.scanner.R
 import com.kernel.scanner.adapter.CargoListAdapter
 import com.kernel.scanner.cargo.CargoActivity
 import com.kernel.scanner.databinding.FragmentSavedBinding
@@ -41,6 +44,10 @@ class SavedFragment : Fragment() {
         savedViewModel.listSaved.observe(viewLifecycleOwner,{ list->
             adapter.setupData(list)
         })
+        var itemDecorationHorizontal = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+        itemDecorationHorizontal.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
+
+        binding.recyclerSaved.addItemDecoration(itemDecorationHorizontal)
         return root
     }
 

@@ -103,7 +103,7 @@ class TestActivity : AppCompatActivity() {
                 }
             // after done, release the ImageProxy object
             imageProxy.close()
-
+            mediaImage.close()
 
         })
 

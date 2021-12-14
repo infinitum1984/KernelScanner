@@ -8,19 +8,23 @@
     <fragment
         android:id="@+id/navigation_cargo"
         android:name="com.kernel.scanner.cargo.CargoFragment"
-        android:label="@string/first_fragment_label"
+        android:label="Сканування"
         tools:layout="@layout/fragment_cargo">
         <action
             android:id="@+id/action_navigation_cargo_to_navigation_scanner"
-            app:destination="@id/navigation_scanner" />
+            app:destination="@id/navigation_scanner"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/navigation_scanner"
         android:name="com.kernel.scanner.cargo.ScannerFragment"
-        android:label="@string/second_fragment_label"
+        android:label="Сканування"
         tools:layout="@layout/fragment_scanner">
         <action
             android:id="@+id/action_navigation_scanner_to_navigation_cargo"
-            app:destination="@id/navigation_cargo" />
+            app:destination="@id/navigation_cargo"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_cargo"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

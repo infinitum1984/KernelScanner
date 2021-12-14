@@ -10,11 +10,15 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_local_shipping_64" />
+        app:srcCompat="@drawable/ic_baseline_local_shipping_64"
+        android:background="@drawable/background_queue"
+        app:tint="@android:color/white"
+        android:padding="12dp"
+        />
 
 
     <TextView
@@ -22,6 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/textViewTrailerNum"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/textViewCarNum"
         tools:text="Причеп: АХ0809КЕ" />
@@ -57,17 +64,5 @@
         app:barrierDirection="end"
         app:constraint_referenced_ids="textViewCarNum,textViewTrailerNum"
         tools:layout_editor_absoluteX="411dp" />
-
-    <TextView
-        android:id="@+id/textViewSeal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        android:textAlignment="viewEnd"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toEndOf="@+id/textViewTrailerNum"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="ЗСУ:000000000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

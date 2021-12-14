@@ -10,10 +10,11 @@ import kotlinx.coroutines.launch
 
 class QueueViewModel : ViewModel() {
 
-    private val _listQueue = MutableLiveData<List<Cargo>>().apply {
+    val listQueue: LiveData<List<Cargo>> =Repository.getQueueCargo()
+
+    fun addTest(){
         viewModelScope.launch {
-            value=Repository.getQueueCargo()
+            Repository.addTestQueue()
         }
     }
-    val listQueue: LiveData<List<Cargo>> = _listQueue
 }
