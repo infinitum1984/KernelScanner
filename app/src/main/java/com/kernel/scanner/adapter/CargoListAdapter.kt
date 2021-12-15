@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kernel.scanner.R
 import com.kernel.scanner.databinding.CargoItemBinding
 import com.kernel.scanner.model.Cargo
+import android.text.format.DateUtils
+
+
+
 
 class CargoListAdapter(val onClickAction:(Cargo)->Unit): RecyclerView.Adapter<CargoListAdapter.ViewHolder>() {
     private var listCargo= listOf<Cargo>()
@@ -26,6 +30,12 @@ class CargoListAdapter(val onClickAction:(Cargo)->Unit): RecyclerView.Adapter<Ca
                 binding.imageView.background=ContextCompat.getDrawable(binding.root.context,R.drawable.background_queue)
 
             }
+            if(cargo.lastEdit!=0L){
+                val now = System.currentTimeMillis()
+                val timeTxt=DateUtils.formatDateTime(binding.root.context,now ,DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE)
+                binding.textViewTime.text=timeTxt
+            }
+
             binding.root.setOnClickListener {
                 onClickAction.invoke(cargo)
             }

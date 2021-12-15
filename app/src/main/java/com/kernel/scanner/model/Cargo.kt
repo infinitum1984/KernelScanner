@@ -24,7 +24,11 @@ data class Cargo(
     @ColumnInfo(name = "driverPhone")
     val driverPhone:String="",
 
+    @ColumnInfo(name = "lastEdit")
+    var lastEdit:Long=0L,
+
     @ColumnInfo(name = "isChecked")
     var isChecked:Boolean=false
     ){
+
 }

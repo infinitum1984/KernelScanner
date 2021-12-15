@@ -1,6 +1,13 @@
 package com.kernel.scanner
 
+import android.app.Activity
 import androidx.core.text.isDigitsOnly
+import androidx.core.content.ContextCompat.startActivity
+
+import android.content.Intent
+import android.net.Uri
+import androidx.core.content.ContextCompat
+
 
 fun findCodeInString(input:String):String{
     var processedStr=""
@@ -32,3 +39,8 @@ fun findCodeInString(input:String):String{
    return ""
 }
 fun String.digitsOnly() = all(Char::isDigit) && isNotEmpty()
+
+fun openProjectLink(activity: Activity){
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/infinitum1984/KernelScanner"))
+    activity.startActivity(browserIntent)
+}

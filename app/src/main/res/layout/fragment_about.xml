@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".about.AboutFragment">
+
+    <TextView
+        android:id="@+id/aboutInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Kernal Scanner\nДодаток розлобений в рамках кейсу від компанії KERNEL. Основний функціонал додатку зчитування номерів пломб та збереження їх в локальну базу данних.\n\nРозробник: Носик Данило Олександрович.\nСтудент 3го курсу Харківського Національного Університету Радіоелектроніки\n\nПосилання на сторінку проекта:"
+        android:textAlignment="textStart"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/linkText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="https://github.com/infinitum1984/KernelScanner"
+        android:textColor="@color/green_500"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:background="?selectableItemBackground"
+        />
+</LinearLayout>
+</ScrollView>

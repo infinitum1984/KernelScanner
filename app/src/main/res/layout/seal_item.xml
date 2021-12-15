@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dp"
+    android:padding="8dp"
     android:background="@drawable/seal_background"
     >
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
         app:srcCompat="@drawable/ic_baseline_article_24"
-        app:tint="@android:color/white"
         />
 
     <TextView
@@ -23,7 +23,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="4dp"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_weight="1"
+
         tools:text="A0000000" />
+
+    <ImageButton
+        android:id="@+id/button_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="32dp"
+        android:background="@drawable/background_delete"
+        android:padding="5dp"
+
+        app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
 </LinearLayout>

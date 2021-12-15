@@ -1,10 +1,7 @@
 package com.kernel.scanner.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.kernel.scanner.model.Cargo
 import com.kernel.scanner.model.Seal
 import kotlinx.coroutines.flow.Flow
@@ -47,5 +44,8 @@ interface CargoDatabaseDao {
 
     @Insert
     fun insertSeal(seal: Seal)
+
+    @Delete
+    fun deleteSeal(seal: Seal)
 
 }

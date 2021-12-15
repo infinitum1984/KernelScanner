@@ -3,6 +3,8 @@ package com.kernel.scanner.cargo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -40,6 +42,38 @@ class CargoActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_cargo,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_ok->{
+                finish()
+                return true
+            }
+            android.R.id.home->{
+                val navController = findNavController(R.id.nav_host_fragment_content_cargo)
+                if (navController.currentBackStackEntry!!.destination.id==R.id.navigation_scanner){
+                    navController.navigate(R.id.action_navigation_scanner_to_navigation_cargo)
+                }else{
+                    finish()
+                }
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val navController = findNavController(R.id.nav_host_fragment_content_cargo)
+        if (navController.currentBackStackEntry!!.destination.id==R.id.navigation_scanner){
+            navController.navigate(R.id.action_navigation_scanner_to_navigation_cargo)
+        }else{
+            finish()
+        }
+    }
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_cargo)
         return navController.navigateUp(appBarConfiguration)

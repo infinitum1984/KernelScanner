@@ -1,5 +1,6 @@
 package com.kernel.scanner.cargo
 
+import android.text.format.DateUtils
 import android.widget.VideoView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -44,7 +45,7 @@ class CargoViewModel(id: Long):ViewModel() {
             viewModelScope.launch {
                 if (!cargo.value!!.isChecked){
                     cargo.value!!.isChecked=true
-
+                    cargo.value!!.lastEdit=System.currentTimeMillis()
                     Repository.updateCargo(cargo.value!!)
                 }
                 Repository.addSeal(Seal(cargoId = cargo.value!!.id,number = inputStr))
@@ -54,6 +55,13 @@ class CargoViewModel(id: Long):ViewModel() {
         }else{
             _sanState.value=true
 
+        }
+    }
+
+    fun deleteSeal(seal:Seal) {
+        viewModelScope.launch {
+            cargo.value!!.lastEdit=System.currentTimeMillis()
+            Repository.deleteSeal(seal)
         }
     }
 }

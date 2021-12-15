@@ -17,4 +17,14 @@
         android:label="@string/title_saved"
         tools:layout="@layout/fragment_saved" />
 
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.kernel.scanner.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="com.kernel.scanner.about.AboutFragment"
+        android:label="@string/title_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>

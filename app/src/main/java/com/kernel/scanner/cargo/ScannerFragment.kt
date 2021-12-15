@@ -2,15 +2,14 @@ package com.kernel.scanner.cargo
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -24,9 +23,10 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.kernel.scanner.R
 import com.kernel.scanner.databinding.FragmentScannerBinding
 import com.kernel.scanner.findCodeInString
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
+import com.kernel.scanner.settings.SavedSettings
+import java.util.concurrent.*
+import kotlin.experimental.and
+import kotlin.math.abs
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -38,8 +38,11 @@ class ScannerFragment : Fragment() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraProvider:ProcessCameraProvider
     private lateinit var cameraSelector:CameraSelector
+    private lateinit var camera:Camera
     val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     var code = ""
+
+    val COMPENSATION_STEP=-7//выведен эксперементальным путём
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +58,9 @@ class ScannerFragment : Fragment() {
             bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(requireContext()))
 
+        binding.imageButton.setOnClickListener {
+           onFlashLight()
+        }
         return binding.root
 
     }
@@ -67,18 +73,36 @@ class ScannerFragment : Fragment() {
         cameraExecutor.shutdown()
         recognizer.close()
 
-
         super.onDestroyView()
         _binding = null
 
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onDetach() {
+        cameraProvider.unbindAll()
+        cameraProvider.shutdown()
+        cameraExecutor.shutdown()
+        recognizer.close()
+        super.onDetach()
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onDestroy() {
+        cameraProvider.unbindAll()
+        cameraProvider.shutdown()
+        cameraExecutor.shutdown()
+        recognizer.close()
+        super.onDestroy()
 
     }
     @SuppressLint("UnsafeOptInUsageError", "RestrictedApi")
     fun bindPreview(cameraProvider: ProcessCameraProvider) {
         var preview: Preview = Preview.Builder()
             .build()
-
         cameraSelector = CameraSelector.Builder()
+
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
             .build()
 
@@ -87,7 +111,6 @@ class ScannerFragment : Fragment() {
         val imageAnalysis = ImageAnalysis.Builder()
             // enable the following line if RGBA output is needed.
             // .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-            //.setTargetResolution(Size(1280, 720))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build()
         imageAnalysis.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { imageProxy ->
@@ -110,12 +133,14 @@ class ScannerFragment : Fragment() {
                     Log.d("D_MainActivity", "bindPreview: ${visionText.text}");
                     val rec_code = findCodeInString(visionText.text)
                     code = rec_code
-                    if (rec_code=="") return@addOnSuccessListener
+                    if (rec_code==""){
+                        return@addOnSuccessListener
+                    }
 
 
                     requireActivity().runOnUiThread {
-                            binding.textViewCode.text = "Розпізнано код: "+rec_code
-                            setFragmentResult(CargoFragment.REQUEST_KEY, bundleOf("code" to rec_code))
+                       binding.textViewCode.text = "Розпізнано код: "+rec_code
+                       setFragmentResult(CargoFragment.REQUEST_KEY, bundleOf("code" to rec_code))
                         cameraExecutor.shutdown()
                         recognizer.close()
                         cameraProvider.unbindAll()
@@ -141,12 +166,70 @@ class ScannerFragment : Fragment() {
 
         })
 
-        cameraProvider.bindToLifecycle(
+        camera=cameraProvider.bindToLifecycle(
             viewLifecycleOwner,
             cameraSelector,
             imageAnalysis,
             preview
         )
+
+        if (SavedSettings.getIsLowerBrightness(requireContext()) &&
+            COMPENSATION_STEP>=camera.cameraInfo.exposureState.exposureCompensationRange.lower
+            && camera.cameraInfo.exposureState.isExposureCompensationSupported){
+
+            camera.cameraControl.setExposureCompensationIndex(COMPENSATION_STEP)//увеличиваем контрастность
+            Log.d("D_ScannerFragment","bindPreview: lower brihg");
+
+        }
+
+        camera.cameraInfo.torchState.observe(this,{state->
+            if (_binding==null) return@observe
+            if (!isAdded) return@observe
+
+            if (state==TorchState.ON){
+
+                binding.imageButton.setImageResource(R.drawable.ic_baseline_flashlight_off_24)
+
+            }else{
+                binding.imageButton.setImageResource(R.drawable.ic_baseline_flashlight_on_24)
+
+            }
+
+        })
+
     }
+    fun analysingBrightness(image: ImageProxy){
+        val bytes = ByteArray(image.getPlanes().get(0).getBuffer().remaining())
+        image.getPlanes().get(0).getBuffer().get(bytes)
+        var total = 0
+        for (value in bytes) {
+            total += value and 0xFF.toByte()
+        }
+        if (bytes.size != 0) {
+            val luminance = abs(total / bytes.size)
+            Log.d("D_TestActivity","analysingBrightness: ${luminance}");
+            // luminance is the value you need.
+            if (luminance<=50){
+                onFlashLight()
+            }
+        }
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
+    private fun onFlashLight() {
+
+        if (camera.cameraInfo.hasFlashUnit()){
+            if (camera.cameraInfo.torchState.value==TorchState.OFF) {
+
+                camera.cameraControl.enableTorch(true)
+            }else{
+
+                camera.cameraControl.enableTorch(false)
+
+            }
+
+        }
+    }
+
 
 }

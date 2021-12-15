@@ -1,11 +1,18 @@
 package com.kernel.scanner.cargo
 
+import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResultListener
@@ -17,13 +24,16 @@ import com.kernel.scanner.databinding.FragmentCargoBinding
 import com.kernel.scanner.model.Cargo
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.OrientationHelper
+import com.google.android.material.snackbar.Snackbar
+import com.kernel.scanner.adapter.SealClickListener
+import com.kernel.scanner.model.Seal
 import com.kernel.scanner.test.TestActivity
 
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class CargoFragment : Fragment() {
+class CargoFragment : Fragment(), SealClickListener {
 
     private var _binding: FragmentCargoBinding? = null
 
@@ -36,7 +46,17 @@ class CargoFragment : Fragment() {
     companion object{
         val REQUEST_KEY="GET_CODE"
     }
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                findNavController().navigate(R.id.action_navigation_cargo_to_navigation_scanner)
 
+            } else {
+                Snackbar.make(binding.root,"Надайте необхідні розширення",Snackbar.LENGTH_SHORT).show()
+            }
+        }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,9 +69,7 @@ class CargoFragment : Fragment() {
         binding.buttonScan.setOnClickListener {
             cargoViewModel.scan(binding.textInputNumber.text.toString())
         }
-        cargoViewModel.cargo.observe(this,{cargo->
-           bindCargo(cargo)
-        })
+
 
         cargoViewModel.savedState.observe(this,{saved->
             if (saved){
@@ -66,9 +84,14 @@ class CargoFragment : Fragment() {
         })
         cargoViewModel.sanState.observe(this,{isScan->
             if (isScan) {
-                //startActivity(Intent(requireContext(),TestActivity::class.java))
-                findNavController().navigate(R.id.action_navigation_cargo_to_navigation_scanner)
-            }else{
+                if (ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED){
+                    findNavController().navigate(R.id.action_navigation_cargo_to_navigation_scanner)
+
+                }else{
+                    requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+
+
             }
 
         })
@@ -77,14 +100,15 @@ class CargoFragment : Fragment() {
             binding.textInputNumber.setText(bundle["code"].toString())
 
         })
+        cargoViewModel.cargo.observe(this,{cargo->
+            bindCargo(cargo)
+        })
         binding.textInputNumber.addTextChangedListener {
             if (it==null) return@addTextChangedListener
             val text=it!!.toString()
             cargoViewModel.processInputNumber(text)
         }
-        val sealAdapter=SealListAdapter({
-
-        })
+        val sealAdapter=SealListAdapter(this)
         binding.recyclerSeal.adapter=sealAdapter
         cargoViewModel.seals.observe(this,{
             sealAdapter.setupData(it)
@@ -105,7 +129,7 @@ class CargoFragment : Fragment() {
         itemDecorationHorizontal.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
 
         binding.recyclerSeal.addItemDecoration(itemDecorationVertical)
-        binding.recyclerSeal.addItemDecoration(itemDecorationHorizontal)
+        //binding.recyclerSeal.addItemDecoration(itemDecorationHorizontal)
         return binding.root
 
     }
@@ -115,11 +139,36 @@ class CargoFragment : Fragment() {
         binding.textViewTrailerNum.text=cargo.trailerNumber
         binding.textViewDriverNum.text=cargo.driverPhone
         binding.textViewDriverName.text=cargo.driverName
+        activity?.title=cargo.carNumber
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(seal: Seal) {
+        copySealNumber(seal)
+    }
+
+    private fun copySealNumber(seal: Seal) {
+        val clipboard = context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Copied Text", seal.number)
+        clipboard.setPrimaryClip(clip)
+        Snackbar.make(binding.root,"Номер скопійовано",Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onDeleteClick(seal: Seal) {
+        cargoViewModel.deleteSeal(seal)
     }
 }

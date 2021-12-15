@@ -21,11 +21,13 @@
             android:name=".cargo.CargoActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+
             android:label="Cargo"
             android:theme="@style/Theme.KernelScanner.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.KernelScanner.NoActionBar"
            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

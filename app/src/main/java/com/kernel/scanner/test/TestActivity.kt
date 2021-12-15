@@ -21,6 +21,7 @@ import com.kernel.scanner.databinding.ActivityTestBinding
 import com.kernel.scanner.findCodeInString
 import java.util.*
 import java.util.concurrent.ExecutorService
+import kotlin.experimental.and
 
 
 class TestActivity : AppCompatActivity() {
@@ -74,7 +75,6 @@ class TestActivity : AppCompatActivity() {
             val mediaImage = imageProxy.image
             if (mediaImage == null) return@Analyzer
 
-
             val image =
                 InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
@@ -113,6 +113,20 @@ class TestActivity : AppCompatActivity() {
             imageAnalysis,
             preview
         )
+    }
+    fun analysingBrightness(image:ImageProxy){
+        val bytes = ByteArray(image.getPlanes().get(0).getBuffer().remaining())
+        image.getPlanes().get(0).getBuffer().get(bytes)
+        var total = 0
+        for (value in bytes) {
+            total += value and 0xFF.toByte()
+        }
+        if (bytes.size != 0) {
+            val luminance = total / bytes.size
+            Log.d("D_TestActivity","analysingBrightness: ${luminance}");
+            // luminance is the value you need.
+        }
+        image.close()
     }
 
 

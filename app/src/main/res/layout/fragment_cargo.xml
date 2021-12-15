@@ -125,15 +125,17 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputNumber"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonScan"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_marginTop="16dp"
+
         android:text="Сканувати"
         app:icon="@drawable/ic_baseline_document_scanner_24"
         app:layout_constraintEnd_toEndOf="parent"
@@ -144,7 +146,7 @@
         android:id="@+id/textViewInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
@@ -152,15 +154,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSeal"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textViewInfo"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
-        tools:listitem="@layout/seal_item"
-        />
+        tools:listitem="@layout/seal_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

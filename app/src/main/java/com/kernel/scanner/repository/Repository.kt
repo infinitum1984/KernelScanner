@@ -76,4 +76,14 @@ object Repository {
             driverName = "Иван Иванов Иванович",driverPhone = "0500642665"))
     }
 
+    suspend fun deleteSeal(seal: Seal) {
+        if (KernelApplication.getContext()==null) return
+
+        withContext(Dispatchers.IO){
+            val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
+            dataSource.deleteSeal(seal)
+        }
+
+    }
+
 }
