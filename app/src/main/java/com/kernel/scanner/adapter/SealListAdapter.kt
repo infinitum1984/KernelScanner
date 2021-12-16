@@ -37,8 +37,8 @@ class SealListAdapter(val onClickAction:SealClickListener): RecyclerView.Adapter
     }
 
     override fun getItemCount()=listSeal.size
-}
-interface SealClickListener{
-    fun onItemClick(seal: Seal)
-    fun onDeleteClick(seal: Seal)
+    interface SealClickListener{
+        fun onItemClick(seal: Seal)
+        fun onDeleteClick(seal: Seal)
+    }
 }

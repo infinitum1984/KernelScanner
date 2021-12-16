@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.format.DateUtils
@@ -13,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResultListener
@@ -26,27 +24,25 @@ import com.kernel.scanner.model.Cargo
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.OrientationHelper
 import com.google.android.material.snackbar.Snackbar
-import com.kernel.scanner.adapter.SealClickListener
 import com.kernel.scanner.model.Seal
-import com.kernel.scanner.test.TestActivity
 
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class CargoFragment : Fragment(), SealClickListener {
+class CargoFragment : Fragment(), SealListAdapter.SealClickListener {
 
-    private var _binding: FragmentCargoBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    private var _cargoViewModel:CargoViewModel?=null
-    private val cargoViewModel get() = _cargoViewModel!!
     companion object{
         val REQUEST_KEY="GET_CODE"
     }
+
+    private var _binding: FragmentCargoBinding? = null
+
+    private val binding get() = _binding!!
+
+    private lateinit var cargoViewModel :CargoViewModel
+
+    lateinit var sealAdapter:SealListAdapter
     val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -55,7 +51,7 @@ class CargoFragment : Fragment(), SealClickListener {
                 findNavController().navigate(R.id.action_navigation_cargo_to_navigation_scanner)
 
             } else {
-                Snackbar.make(binding.root,"Надайте необхідні розширення",Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root,getString(R.string.allow_permissions),Snackbar.LENGTH_SHORT).show()
             }
         }
     override fun onCreateView(
@@ -65,74 +61,94 @@ class CargoFragment : Fragment(), SealClickListener {
 
         _binding = FragmentCargoBinding.inflate(inflater, container, false)
 
+        cargoViewModel= ViewModelProvider(this,CargoViewModelFactory(CargoActivity.getIdFromIntent(requireActivity().intent))).get(CargoViewModel::class.java)
 
-        _cargoViewModel= ViewModelProvider(this,CargoViewModelFactory(CargoActivity.getIdFromIntent(requireActivity().intent))).get(CargoViewModel::class.java)
-        binding.buttonScan.setOnClickListener {
-            cargoViewModel.scan(binding.textInputNumber.text.toString())
-        }
-
-
-        cargoViewModel.savedState.observe(this,{saved->
-            if (saved){
-                binding.buttonScan.text="Зберегти"
-                binding.textViewInfo.text="Переконайтеся, що номер введений вірно та натисніть зберегти."
-
-            }else{
-                binding.textViewInfo.text="Наведить камеру телефона на пломбу та натисніть сканувати."
-                binding.buttonScan.text="Сканувати"
-
-            }
-        })
-        cargoViewModel.sanState.observe(this,{isScan->
-            if (isScan) {
-                if (ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED){
-                    findNavController().navigate(R.id.action_navigation_cargo_to_navigation_scanner)
-
-                }else{
-                    requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-                }
-
-
-            }
-
-        })
         setFragmentResultListener(REQUEST_KEY,{
             requestKey, bundle ->
             binding.textInputNumber.setText(bundle["code"].toString())
 
         })
+
+        binding.textInputNumber.addTextChangedListener {editable->
+
+            if (editable==null) return@addTextChangedListener
+
+            val text=editable.toString()
+            cargoViewModel.processInputNumber(text)
+        }
+
+        sealAdapter=SealListAdapter(this)
+        binding.recyclerSeal.adapter=sealAdapter
+
+
+         var itemDecorationVertical = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+        itemDecorationVertical.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.recycler_divider)!!)
+
+        var itemDecorationHorizontal = DividerItemDecoration(this.context, DividerItemDecoration.HORIZONTAL)
+        itemDecorationHorizontal.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.recycler_divider)!!)
+
+        binding.recyclerSeal.addItemDecoration(itemDecorationVertical)
+
+        return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         cargoViewModel.cargo.observe(this,{cargo->
             bindCargo(cargo)
         })
-        binding.textInputNumber.addTextChangedListener {
-            if (it==null) return@addTextChangedListener
-            val text=it!!.toString()
-            cargoViewModel.processInputNumber(text)
+
+        binding.buttonScan.setOnClickListener {
+            cargoViewModel.scan(binding.textInputNumber.text.toString())
         }
-        val sealAdapter=SealListAdapter(this)
-        binding.recyclerSeal.adapter=sealAdapter
-        cargoViewModel.seals.observe(this,{
-            sealAdapter.setupData(it)
+
+        cargoViewModel.savedState.observe(this,{saved->
+           processSaved(saved)
         })
-        cargoViewModel.textClear.observe(this,{
-            if (it){
+        cargoViewModel.sanState.observe(this,{isScan->
+           processIsScan(isScan)
+
+        })
+        cargoViewModel.textClear.observe(this,{isClear->
+            if (isClear)
                 binding.textInputNumber.setText("")
-            }
+
         })
-        val dividerItemDecoration = DividerItemDecoration(
-            requireContext(),
-            OrientationHelper.VERTICAL,
-        )
-        var itemDecorationVertical = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
-        itemDecorationVertical.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
+        cargoViewModel.seals.observe(this,{listSeal->
+            sealAdapter.setupData(listSeal)
+        })
 
-        var itemDecorationHorizontal = DividerItemDecoration(this.context, DividerItemDecoration.HORIZONTAL)
-        itemDecorationHorizontal.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
 
-        binding.recyclerSeal.addItemDecoration(itemDecorationVertical)
-        //binding.recyclerSeal.addItemDecoration(itemDecorationHorizontal)
-        return binding.root
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
+    private fun processIsScan(isScan:Boolean){
+        if (isScan) {
+            if (ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED){
+                findNavController().navigate(R.id.action_navigation_cargo_to_navigation_scanner)
+
+            }else{
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+
+
+        }
+    }
+
+    private fun processSaved(saved:Boolean){
+        if (saved){
+            binding.buttonScan.text=getString(R.string.save_text)
+            binding.textViewInfo.text=getString(R.string.check_text)
+
+        }else{
+            binding.textViewInfo.text=getString(R.string.info_scan_text)
+            binding.buttonScan.text=getString(R.string.scan_text)
+
+        }
     }
 
     private fun bindCargo(cargo: Cargo) {
@@ -153,19 +169,8 @@ class CargoFragment : Fragment(), SealClickListener {
 
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     override fun onItemClick(seal: Seal) {
         copySealNumber(seal)
@@ -175,7 +180,7 @@ class CargoFragment : Fragment(), SealClickListener {
         val clipboard = context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Copied Text", seal.number)
         clipboard.setPrimaryClip(clip)
-        Snackbar.make(binding.root,"Номер скопійовано",Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.root,getString(R.string.num_is_copied),Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDeleteClick(seal: Seal) {

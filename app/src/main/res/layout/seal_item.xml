@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="@drawable/seal_background"
+    android:background="@drawable/background_seal"
     >
 
     <ImageView
@@ -14,7 +14,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center_vertical"
-        app:srcCompat="@drawable/ic_baseline_article_24"
+        app:srcCompat="@drawable/ic_baseline_article"
         />
 
     <TextView
@@ -37,5 +37,5 @@
         android:background="@drawable/background_delete"
         android:padding="5dp"
 
-        app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
+        app:srcCompat="@drawable/ic_baseline_delete_forever" />
 </LinearLayout>

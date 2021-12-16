@@ -1,10 +1,8 @@
-package com.kernel.scanner.cargo
+package com.kernel.scanner.scanner
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +12,13 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.kernel.scanner.R
+import com.kernel.scanner.cargo.CargoFragment
 import com.kernel.scanner.databinding.FragmentScannerBinding
 import com.kernel.scanner.findCodeInString
 import com.kernel.scanner.settings.SavedSettings
@@ -79,24 +77,6 @@ class ScannerFragment : Fragment() {
 
     }
 
-    @SuppressLint("RestrictedApi")
-    override fun onDetach() {
-        cameraProvider.unbindAll()
-        cameraProvider.shutdown()
-        cameraExecutor.shutdown()
-        recognizer.close()
-        super.onDetach()
-    }
-
-    @SuppressLint("RestrictedApi")
-    override fun onDestroy() {
-        cameraProvider.unbindAll()
-        cameraProvider.shutdown()
-        cameraExecutor.shutdown()
-        recognizer.close()
-        super.onDestroy()
-
-    }
     @SuppressLint("UnsafeOptInUsageError", "RestrictedApi")
     fun bindPreview(cameraProvider: ProcessCameraProvider) {
         var preview: Preview = Preview.Builder()
@@ -115,7 +95,6 @@ class ScannerFragment : Fragment() {
             .build()
         imageAnalysis.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { imageProxy ->
             if (code!="") return@Analyzer
-            val rotationDegrees = imageProxy.imageInfo.rotationDegrees
             // insert your code here.
             val mediaImage = imageProxy.image
             if (mediaImage == null) return@Analyzer
@@ -126,8 +105,6 @@ class ScannerFragment : Fragment() {
 
             val result = recognizer.process(image)
                 .addOnSuccessListener { visionText ->
-                    // Task completed successfully
-                    // ...
                     if (!isAdded) return@addOnSuccessListener
 
                     Log.d("D_MainActivity", "bindPreview: ${visionText.text}");
@@ -136,16 +113,14 @@ class ScannerFragment : Fragment() {
                     if (rec_code==""){
                         return@addOnSuccessListener
                     }
-
-
                     requireActivity().runOnUiThread {
-                       binding.textViewCode.text = "Розпізнано код: "+rec_code
+                       binding.textViewCode.text = getString(R.string.code_is_recognized)+rec_code
                        setFragmentResult(CargoFragment.REQUEST_KEY, bundleOf("code" to rec_code))
                         cameraExecutor.shutdown()
                         recognizer.close()
                         cameraProvider.unbindAll()
                         cameraProvider.shutdown()
-                            findNavController().navigate(R.id.action_navigation_scanner_to_navigation_cargo)
+                        findNavController().navigate(R.id.action_navigation_scanner_to_navigation_cargo)
 
                     }
                 }
@@ -188,10 +163,10 @@ class ScannerFragment : Fragment() {
 
             if (state==TorchState.ON){
 
-                binding.imageButton.setImageResource(R.drawable.ic_baseline_flashlight_off_24)
+                binding.imageButton.setImageResource(R.drawable.ic_baseline_flashlight_off)
 
             }else{
-                binding.imageButton.setImageResource(R.drawable.ic_baseline_flashlight_on_24)
+                binding.imageButton.setImageResource(R.drawable.ic_baseline_flashlight_on)
 
             }
 

@@ -33,7 +33,7 @@ object Repository {
 
             val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
 
-            return dataSource.getSavedList()
+            return dataSource.getSavedLiveList()
 
         }
      fun getCargo(id:Long): LiveData<Cargo> {
@@ -70,7 +70,7 @@ object Repository {
 
         val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
 
-        return dataSource.getSeals(cargoId)
+        return dataSource.getLiveSeals(cargoId)
     }
 
     suspend fun addTestQueue() {

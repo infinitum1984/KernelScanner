@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_scanner"
-        android:name="com.kernel.scanner.cargo.ScannerFragment"
+        android:name="com.kernel.scanner.scanner.ScannerFragment"
         tools:layout="@layout/fragment_scanner">
         <action
             android:id="@+id/action_navigation_scanner_to_navigation_cargo"

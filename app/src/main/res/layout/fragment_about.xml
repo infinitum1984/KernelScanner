@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="https://github.com/infinitum1984/KernelScanner"
+        android:text="@string/app_link_git"
         android:textColor="@color/green_500"
         android:textSize="16sp"
         android:textStyle="bold"

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Relation
 
 @Entity(tableName = "cargo_table")
-
+//Груз
 data class Cargo(
 
     @PrimaryKey(autoGenerate = true)

@@ -65,7 +65,7 @@
         style="@style/CargoTextStyle"
 
         android:layout_marginTop="8dp"
-        android:text="Ім'я водія:"
+        android:text="@string/name_lable"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Дата останніх змін:"
+        android:text="@string/last_date_lable"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -84,7 +84,7 @@
         android:id="@+id/textView5"
         style="@style/CargoTextStyle"
         android:layout_marginTop="8dp"
-        android:text="Номер водія:"
+        android:text="@string/phone_lable"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -92,14 +92,14 @@
         android:id="@+id/textView4"
         style="@style/CargoTextStyle"
         android:layout_marginTop="8dp"
-        android:text="Номер причепа:"
+        android:text="@string/trailer_num_lable"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView"
         style="@style/CargoTextStyle"
-        android:text="Номер машини:"
+        android:text="@string/car_num_lable"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
@@ -139,7 +139,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:hint="Номер пломби"
+        android:hint="@string/num_seal_hint"
         app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
         app:layout_constraintStart_toEndOf="@id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/barrierInfo">
@@ -158,8 +158,8 @@
         android:layout_height="64dp"
         android:layout_marginTop="16dp"
 
-        android:text="Сканувати"
-        app:icon="@drawable/ic_baseline_document_scanner_24"
+        android:text="@string/scan_text"
+        app:icon="@drawable/ic_baseline_document_scanner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textField" />

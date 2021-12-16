@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/navigation_queue"
-        android:icon="@drawable/ic_baseline_local_shipping_24"
+        android:icon="@drawable/ic_baseline_local_shipping"
         android:title="@string/title_queue" />
 
     <item
         android:id="@+id/navigation_saved"
-        android:icon="@drawable/ic_baseline_save_24"
+        android:icon="@drawable/ic_baseline_save"
         android:title="@string/title_saved" />
 
 </menu>

@@ -39,13 +39,13 @@ fun findCodeInString(input:String):String{
    return ""
 }
 fun String.digitsOnly() = all(Char::isDigit) && isNotEmpty()
-
 fun openProjectLink(activity: Activity){
     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/infinitum1984/KernelScanner"))
     activity.startActivity(browserIntent)
 }
 
-    fun getRandomNumber() : String {
+//Методы для тестрования
+fun getRandomNumber() : String {
         val allowedLetters = ('А'..'Н')
         val allowedNums=('0'..'9')
         var outStr=""+allowedLetters.random()+allowedLetters.random()

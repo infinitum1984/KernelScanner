@@ -1,22 +1,48 @@
 <resources>
     <string name="app_name">Kernel Scanner</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_queue">Черга</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_saved">Збережені</string>
-    <string name="title_activity_cargo">CargoActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_settings">Налаштування</string>
+<!--    MainActivity-->
+    <string name="title_queue">Черга</string>
+    <string name="title_saved">Збережені</string>
+     <string name="title_settings">Налаштування</string>
     <string name="title_about">Про програму</string>
-    <string name="main_info">Kernal Scanner\nДодаток розлобений в рамках кейсу від компанії KERNEL. Основний функціонал додатку зчитування номерів пломб та збереження їх в локальну базу данних.\n\nРозробник: Носик Данило Олександрович.\nСтудент 3го курсу Харківського Національного Університету Радіоелектроніки\n\nПосилання на сторінку проекта:</string>
+
+<!--    About-->
+    <string name="main_info">Kernal Scanner\nДодаток розлобений в рамках кейсу від компанії KERNEL.
+        Основний функціонал додатку зчитування номерів пломб та збереження їх в локальну базу данних.\n\nРозробник:
+        Носик Данило Олександрович.\nСтудент 3го курсу Харківського Національного Університету
+        Радіоелектроніки\n\nПосилання на сторінку проекта:</string>
+    <string name="app_link_git">https://github.com/infinitum1984/KernelScanner</string>
+    <string name="about">Про програму</string>
+
+
+    <!--    CargoActivity-->
+    <string name="car_lable">ТЗ: </string>
+    <string name="trailer_lable">Причеп: </string>
+    <string name="allow_permissions">Надайте необхідні розширення</string>
+    <string name="save_text">Зберегти</string>
+    <string name="check_text">Переконайтеся, що номер введений вірно та натисніть зберегти.</string>
+    <string name="info_scan_text">Наведить камеру телефона на пломбу та натисніть сканувати.</string>
+    <string name="scan_text">Сканувати</string>
+    <string name="num_is_copied">Номер скопійовано</string>
+    <string name="car_num_lable">Номер машини:</string>
+    <string name="trailer_num_lable">Номер причепа:</string>
+    <string name="phone_lable">Номер водія:</string>
+    <string name="name_lable">Ім\'я водія:</string>
+    <string name="last_date_lable">Дата останніх змін:</string>
+    <string name="num_seal_hint">Номер пломби</string>
+    <string name="put_num_in_rect">Помістіть номер в прямокутник</string>
+    <string name="menu_save">Зберегти</string>
+    <string name="code_is_recognized">\"Розпізнано код: \"</string>
+
+<!--    ScannerFragment-->
+    <string name="processing">Розпізнавання...</string>
+
+<!--    SettingsFragment-->
+    <string name="low_brightness">Зниження яскравості камери</string>
+    <string name="settings">Налаштування</string>
+
+
+
+
 </resources>

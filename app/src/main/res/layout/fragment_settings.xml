@@ -14,7 +14,7 @@
         android:layout_margin="16dp"
         android:textSize="16sp"
         android:padding="10dp"
-        android:text="Зниження яскравості камери"
+        android:text="@string/low_brightness"
 
         />
 

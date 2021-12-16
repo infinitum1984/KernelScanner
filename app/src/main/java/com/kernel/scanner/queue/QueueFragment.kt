@@ -1,6 +1,5 @@
 package com.kernel.scanner.queue
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +17,11 @@ import com.kernel.scanner.cargo.CargoActivity
 class QueueFragment : Fragment() {
 
     private lateinit var queueViewModel: QueueViewModel
-    private var _binding: FragmentQueueBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentQueueBinding? = null
     private val binding get() = _binding!!
 
+    lateinit var adapter:CargoListAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,22 +33,28 @@ class QueueFragment : Fragment() {
         _binding = FragmentQueueBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val adapter= CargoListAdapter({ cargo->
-
+        adapter= CargoListAdapter({ cargo->
             CargoActivity.startActivity(requireContext(),cargo.id)
         })
         binding.recyclerQueue.adapter=adapter
+
+
+        var itemDecorationHorizontal = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+        itemDecorationHorizontal.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.recycler_divider)!!)
+
+        binding.recyclerQueue.addItemDecoration(itemDecorationHorizontal)
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         queueViewModel.listQueue.observe(viewLifecycleOwner,{ list->
             adapter.setupData(list)
         })
         binding.buttonTestAdd.setOnClickListener {
             queueViewModel.addTest()
         }
-        var itemDecorationHorizontal = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
-        itemDecorationHorizontal.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
 
-        binding.recyclerQueue.addItemDecoration(itemDecorationHorizontal)
-        return root
     }
 
     override fun onDestroyView() {
