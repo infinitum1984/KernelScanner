@@ -44,3 +44,28 @@ fun openProjectLink(activity: Activity){
     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/infinitum1984/KernelScanner"))
     activity.startActivity(browserIntent)
 }
+
+    fun getRandomNumber() : String {
+        val allowedLetters = ('А'..'Н')
+        val allowedNums=('0'..'9')
+        var outStr=""+allowedLetters.random()+allowedLetters.random()
+        for (i in 0..3){
+            outStr+=allowedNums.random()
+        }
+        outStr+=""+allowedLetters.random()+allowedLetters.random()
+        return outStr
+    }
+fun getRandomPhone():String{
+    val allowedChars = ('0'..'9')
+    return (1..10)
+        .map { allowedChars.random() }
+        .joinToString("")
+}
+
+val listNames= listOf("Веснин Терентий Артамонович","Алачев Ионафан Милославович", "Борщов Валаам Саввич", "Кашкаров Вукол Орестович", "Евреинов Наркисс Корнеевич",
+"Державин Мартын Мартинович", "Осокин Артемидор Всеславович","Самойлов Архипп Зенонович", "Щербань Валентин Павлинович", "Дубровин Митрий Евлампиевич", "Буяльский Тимофей Аристархович",
+   "Лукин Иуст Мстиславович", "Крашевский Вукол Феоктистович","Ширков Карл Аркадьевич"
+
+
+    )
+fun getRandomName()= listNames.random()

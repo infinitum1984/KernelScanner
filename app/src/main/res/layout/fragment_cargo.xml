@@ -39,6 +39,17 @@
         tools:text="Ivan" />
 
     <TextView
+        android:id="@+id/textViewLastEdit"
+        style="@style/CargoInfoTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7"
+        tools:text="10.02.11" />
+
+    <TextView
         android:id="@+id/textViewCarNum"
         style="@style/CargoInfoTextStyle"
         android:layout_width="wrap_content"
@@ -57,6 +68,17 @@
         android:text="Ім'я водія:"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/CargoTextStyle"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Дата останніх змін:"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
         android:id="@+id/textView5"
@@ -107,7 +129,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="textView6,textViewDriverName"
+        app:constraint_referenced_ids="textView6,textViewDriverName,textView7"
         tools:layout_editor_absoluteY="731dp" />
 
     <com.google.android.material.textfield.TextInputLayout

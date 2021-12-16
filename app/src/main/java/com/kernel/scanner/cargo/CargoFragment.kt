@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.format.DateUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -139,6 +140,15 @@ class CargoFragment : Fragment(), SealClickListener {
         binding.textViewTrailerNum.text=cargo.trailerNumber
         binding.textViewDriverNum.text=cargo.driverPhone
         binding.textViewDriverName.text=cargo.driverName
+
+        if (cargo.lastEdit>0) {
+            val timeTxt = DateUtils.formatDateTime(
+                requireContext(), cargo.lastEdit,
+                DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_YEAR
+            )
+            binding.textViewLastEdit.text = timeTxt
+
+        }
         activity?.title=cargo.carNumber
 
     }

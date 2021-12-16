@@ -18,7 +18,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:text="Kernal Scanner\nДодаток розлобений в рамках кейсу від компанії KERNEL. Основний функціонал додатку зчитування номерів пломб та збереження їх в локальну базу данних.\n\nРозробник: Носик Данило Олександрович.\nСтудент 3го курсу Харківського Національного Університету Радіоелектроніки\n\nПосилання на сторінку проекта:"
+        android:text="@string/main_info"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="18sp" />

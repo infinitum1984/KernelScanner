@@ -11,6 +11,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.kernel.scanner.R
 import com.kernel.scanner.databinding.ActivityCargoBinding
 
@@ -30,7 +32,7 @@ class CargoActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Firebase.analytics
         binding = ActivityCargoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

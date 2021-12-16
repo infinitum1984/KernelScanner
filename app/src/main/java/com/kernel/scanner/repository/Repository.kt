@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.kernel.scanner.KernelApplication
 import com.kernel.scanner.database.CargoDatabase
+import com.kernel.scanner.getRandomName
+import com.kernel.scanner.getRandomNumber
+import com.kernel.scanner.getRandomPhone
 import com.kernel.scanner.model.Cargo
 import com.kernel.scanner.model.Seal
 import kotlinx.coroutines.Dispatchers
@@ -72,8 +75,8 @@ object Repository {
 
     suspend fun addTestQueue() {
         val dataSource=CargoDatabase.getInstance(KernelApplication.getContext()!!).cargoDatabaseDao
-        dataSource.insert(Cargo(carNumber = "AN21323SD", trailerNumber = "AS213233SD",
-            driverName = "Иван Иванов Иванович",driverPhone = "0500642665"))
+        dataSource.insert(Cargo(carNumber =getRandomNumber(), trailerNumber = getRandomNumber(),
+            driverName = getRandomName(),driverPhone = getRandomPhone()))
     }
 
     suspend fun deleteSeal(seal: Seal) {
@@ -85,5 +88,6 @@ object Repository {
         }
 
     }
+
 
 }
