@@ -13,29 +13,32 @@ fun findCodeInString(input:String):String{
     var processedStr=""
     for (ch in input.toCharArray()){
         if (ch.isLetter()||ch.isDigit()){
-
             processedStr+=ch
         }
     }
     var index=0;
     var savedC:Char?=null
+
     for (ch in processedStr.toCharArray()){
+
         if (ch.isLetter()){
             savedC=ch;
         }
+
         if (ch.isDigit() && savedC!=null){
+
             if (index+8>=processedStr.length) return ""
+
             val tmp=processedStr.substring(index,index+8)
-            println(tmp)
+
             if (tmp.digitsOnly()){
-
-
                 processedStr=processedStr.substring(index-1,index+8)
                 return processedStr
             }
         }
         index++
     }
+
    return ""
 }
 fun String.digitsOnly() = all(Char::isDigit) && isNotEmpty()
@@ -62,8 +65,11 @@ fun getRandomPhone():String{
         .joinToString("")
 }
 
-val listNames= listOf("Веснин Терентий Артамонович","Алачев Ионафан Милославович", "Борщов Валаам Саввич", "Кашкаров Вукол Орестович", "Евреинов Наркисс Корнеевич",
-"Державин Мартын Мартинович", "Осокин Артемидор Всеславович","Самойлов Архипп Зенонович", "Щербань Валентин Павлинович", "Дубровин Митрий Евлампиевич", "Буяльский Тимофей Аристархович",
+val listNames= listOf("Веснин Терентий Артамонович","Алачев Ионафан Милославович", "Борщов Валаам Саввич", "Кашкаров Вукол Орестович",
+    "Евреинов Наркисс Корнеевич",
+"Державин Мартын Мартинович", "Осокин Артемидор Всеславович","Самойлов Архипп Зенонович",
+    "Щербань Валентин Павлинович",
+    "Дубровин Митрий Евлампиевич", "Буяльский Тимофей Аристархович",
    "Лукин Иуст Мстиславович", "Крашевский Вукол Феоктистович","Ширков Карл Аркадьевич"
 
 

@@ -20,7 +20,9 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:label="Cargo"
-            android:theme="@style/Theme.KernelScanner.NoActionBar" />
+            android:theme="@style/Theme.KernelScanner.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            />
 
         <activity
             android:name=".MainActivity"

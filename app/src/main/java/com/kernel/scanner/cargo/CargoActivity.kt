@@ -54,6 +54,8 @@ class CargoActivity : AppCompatActivity() {
                 finish()
                 return true
             }
+
+            //Из за ошибки возникающей при возвращению с фрагмента сканирования пришлось переопределить нажатие кнопки назад
             android.R.id.home->{
                 val navController = findNavController(R.id.nav_host_fragment_content_cargo)
                 if (navController.currentBackStackEntry!!.destination.id==R.id.navigation_scanner){
@@ -67,6 +69,7 @@ class CargoActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //Из за ошибки возникающей при возвращению с фрагмента сканирования пришлось переопределить нажатие кнопки назад
     override fun onBackPressed() {
         val navController = findNavController(R.id.nav_host_fragment_content_cargo)
         if (navController.currentBackStackEntry!!.destination.id==R.id.navigation_scanner){

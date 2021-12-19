@@ -27,7 +27,7 @@ class CargoViewModel(id: Long):ViewModel() {
 
     fun processInputNumber(text:String){
         _sanState.value=false
-        if (text.length>=9){
+        if (text.length==9){
             if(text.toCharArray()[0].isLetter()){
                 if (text.substring(1,text.length-1).digitsOnly()){
                     _savedState.value=true

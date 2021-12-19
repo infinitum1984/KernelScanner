@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "seal_table")
 
-//Пломбп
+//Пломба
 data class Seal(
 
     @PrimaryKey(autoGenerate = true)

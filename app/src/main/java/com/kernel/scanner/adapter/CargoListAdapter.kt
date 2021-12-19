@@ -21,9 +21,10 @@ class CargoListAdapter(val onClickAction:(Cargo)->Unit): RecyclerView.Adapter<Ca
     inner class ViewHolder(val binding:CargoItemBinding):RecyclerView.ViewHolder(binding.root) {
         fun bind(cargo: Cargo){
             binding.textViewCarNum.text=binding.root.context
-                .getString(R.string.car_lable)+cargo.carNumber
+                .getString(R.string.car_lable)+" "+cargo.carNumber
             
-            binding.textViewTrailerNum.text=binding.root.context.getString(R.string.trailer_lable)+cargo.trailerNumber
+            binding.textViewTrailerNum.text=binding.root.context.getString(R.string.trailer_lable)+
+                    " "+cargo.trailerNumber
             if (cargo.isChecked)
             {
                 binding.imageView.background=ContextCompat.getDrawable(binding.root.context,R.drawable.background_saved)

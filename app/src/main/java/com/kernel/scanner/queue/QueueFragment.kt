@@ -53,6 +53,7 @@ class QueueFragment : Fragment() {
         })
         binding.buttonTestAdd.setOnClickListener {
             queueViewModel.addTest()
+
         }
 
     }
