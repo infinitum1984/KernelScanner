@@ -6,6 +6,9 @@
   <img src="description/logo.png" width="250" title="Демо">
 </p>
 
+<a href='https://play.google.com/store/apps/details?id=com.kernel.scanner&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="250"/></a>
+
+
 ## Содержание
 - [Kernel Scanner](#kernel-scanner)
   - [Содержание](#содержание)
@@ -28,8 +31,12 @@
 </p>
 
 ## Загрузить
-[Загрузить apk](description/KernelScanner-debug.apk)
+[Загрузить дебаг apk](description/KernelScanner-debug.apk)
 <br/>
+
+Также приложение доступно на Google Play
+
+<a href='https://play.google.com/store/apps/details?id=com.kernel.scanner&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="250"/></a>
 
 
 ## Предисловие
